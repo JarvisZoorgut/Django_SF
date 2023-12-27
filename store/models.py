@@ -8,7 +8,7 @@ class Product(models.Model):
     description = models.TextField()
     quantity = models.IntegerField(validators=[MinValueValidator(0)])
     # поле категории будет ссылаться на модель категории
-     # все продукты в категории будут доступны через поле products
+    # все продукты в категории будут доступны через поле products
     category = models.ForeignKey(to='Category', on_delete=models.CASCADE, related_name='products')
     price = models.FloatField(
     validators=[MinValueValidator(0.0)])
