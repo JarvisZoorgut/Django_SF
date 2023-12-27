@@ -10,8 +10,7 @@ class Product(models.Model):
     # поле категории будет ссылаться на модель категории
     # все продукты в категории будут доступны через поле products
     category = models.ForeignKey(to='Category', on_delete=models.CASCADE, related_name='products')
-    price = models.FloatField(
-    validators=[MinValueValidator(0.0)])
+    price = models.FloatField(validators=[MinValueValidator(0.0)])
 
     def __str__(self):
         return f'{self.name.title()}: {self.description[:20]}. Цена: {str(self.price)}'
