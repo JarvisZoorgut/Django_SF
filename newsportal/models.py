@@ -8,6 +8,9 @@ class Author(models.Model):
     
     ratingAuthor = models.SmallIntegerField(default=0)
 
+    def __str__(self):
+        return f'{self.authorUser} / Рейтинг: {self.ratingAuthor}'
+
     def uptate_rating(self):
         postRat = self.post_set.aggregate(postRating=Sum('rating'))
         pRat = 0
@@ -38,6 +41,9 @@ class Post(models.Model):
     title = models.CharField(max_length=128)
     text = models.TextField()
     rating = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.categoryType} / {self.title}'    
     
     def like(self):
         self.rating +=1
