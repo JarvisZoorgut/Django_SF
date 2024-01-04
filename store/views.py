@@ -29,7 +29,7 @@ class ProductsList(ListView):
         context['time_now'] = datetime.utcnow()
         # Добавим ещё одну пустую переменную,
         # чтобы на её примере рассмотреть работу ещё одного фильтра.
-        context['next_sale'] = 'Распродажа в воскресенье!'
+        context['next_sale'] = None # или вставляем текст 'Распродажа в воскресенье!'
         return context
 
 class ProductDetail(DetailView):

@@ -41,7 +41,7 @@ Products
                 чтобы ограничить количество символов до 15.
                 Все остальные символы превратятся в многоточие. -->
                 <td>{{ product.description|truncatewords:1 }}</td>
-               <td>{{ product.category.name }}</td>
+               <td>{{ product.category.name|truncatechars:5 }}</td>
                <td>{{ product.price }}</td>
                <td>{{ product.quantity }}</td>
            </tr>
