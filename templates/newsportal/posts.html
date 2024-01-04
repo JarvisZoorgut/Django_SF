@@ -1,0 +1,21 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Posts
+{% endblock title %}
+
+{% block content %}
+    <h1>Всего новостей - {{ posts|length }}</h1>
+    <hr>
+    {% if posts %}
+           {% for post in posts %}
+           <tr>
+                {{ post.title }} &nbsp&nbsp | &nbsp&nbsp
+                {{ post.dateCreation|date:'d.m.Y'}} &nbsp&nbsp | &nbsp&nbsp
+                {{ post.text|truncatewords:20}}
+                <br>
+           {% endfor %}
+   {% else %}
+       <h2>Новостей нет</h2>
+   {% endif %}
+{% endblock content %}
