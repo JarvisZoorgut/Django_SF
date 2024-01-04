@@ -1,3 +1,7 @@
 venv/
 .env
 .DS_Store
+config/__pycache__
+fpages/__pycache__
+newsportal/__pycache__
+store/__pycache__
