@@ -5,7 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Bare - Start Bootstrap Template</title>
+        {% block title %}
+            <title>{{ flatpage.title }}</title>
+        {% endblock title %}
         <!-- Favicon-->
         <!-- Core theme CSS (includes Bootstrap)-->
         {% load static %}
@@ -30,7 +32,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/about/">О нас</a>
+                            <a class="nav-link" href="/">О нас</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/contacts/">Контакты</a>
@@ -50,7 +52,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     {% block content %}
-                    {{ flatpage.content }}
+                        <h2>{{ flatpage.content }}</h2>
                     {% endblock content %}
                 </div>
             </div>

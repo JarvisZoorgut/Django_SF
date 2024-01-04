@@ -1,7 +1,11 @@
 {% extends 'flatpages/default.html' %}
 
+{% load custom_filters %}
+<!-- Подключаем новый файл с нашим тегом -->
+{% load custom_tags %}
+
 {% block title %}
-Products
+<title>Магазин</title>
 {% endblock title %}
 
 {% block content %}
@@ -10,7 +14,11 @@ Products
     и применяем к ней фильтр date. По назначению этот фильтр очень похож
     на метод strftime у объекта datetime в Python — вывод времени
     в указанном формате. -->
-    <h3>{{ time_now|date:'D d M Y' }}</h3>
+    <!-- Вот так выглядело использование переменной и фильтра -->
+    <!-- Вот так выглядело использование переменной и фильтра -->
+    <h3>{{ time_now|date:'M d Y l' }}</h3>
+    <!-- А вот так мы используем наш тег-->
+    <h3>{% current_time '%b %d %Y %a' %}</h3>
     <!-- Если в переменной next_sale будет None,
     то выведется указанный в фильтре текст -->
     <h3> {{ next_sale|default_if_none:"Чуть позже сообщим о распродаже!" }} </h3>
@@ -29,21 +37,22 @@ Products
             <!-- Для каждого товара будете генерироваться новая строчка,
             т.е. новый HTML код, который указан в теле цикла.
             При этом сам цикл работает точно так же, как и в Python.
-            product — переменная цикла, т.е. наш товар полученный из списка -->
-            {% for product in products %}
+            x — переменная цикла, т.е. наш товар полученный из списка -->
+            {% for x in products %}
             <tr>
                 <!-- Не забываем, что переменные в шаблоне ничем не отличаются
                 от переменных в Python. Здесь также можно получать доступ к
                 полям объекта модели. Например, здесь мы выводим имя,
                 в следующем столбце описание, и т.д.  -->
-                <td>{{ product.name }}</td>
+                <td>{{ x.name }}</td>
                 <!-- Добавим специальный фильтр truncatechars,
                 чтобы ограничить количество символов до 15.
                 Все остальные символы превратятся в многоточие. -->
-                <td>{{ product.description|truncatewords:1 }}</td>
-                <td>{{ product.category.name|truncatechars:5 }}</td>
-                <td>{{ product.price }}</td>
-                <td>{{ product.quantity }}</td>
+                <td>{{ x.description|truncatewords:1 }}</td>
+                <td>{{ x.category.name|truncatechars:5 }}</td>
+                <!-- Используем наш фильтр -->
+                <td>{{ x.price|currency:"usd" }}</td>
+                <td>{{ x.quantity }}</td>
             </tr>
             {% endfor %}
 
