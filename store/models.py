@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.shortcuts import reverse
 
 
 # Товар для нашей витрины 
@@ -13,13 +14,17 @@ class Product(models.Model):
     quantity = models.IntegerField(validators=[MinValueValidator(0)], verbose_name='Количество')
     price = models.FloatField(validators=[MinValueValidator(0.0)], verbose_name='Цена')
 
-    def __str__(self):
-        return f'{self.name} : {self.description[:20]}. Цена: {str(self.price)}'
-    
     class Meta:
         verbose_name = 'Товар'
         verbose_name_plural = 'Товар'
         ordering = ['-price']
+
+    def __str__(self):
+        return f'{self.name} : {self.description[:20]}. Цена: {str(self.price)}'
+
+    #для упрощения описания ссылок
+    def get_absolute_url(self):
+        return reverse('detail', kwargs={'id': self.id})
 
 
 # Категория, к которой будет привязываться товар
