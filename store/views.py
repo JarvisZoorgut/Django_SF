@@ -2,6 +2,7 @@ from datetime import datetime
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
 from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView
 from .models import Product
 
 
@@ -39,3 +40,9 @@ class ProductDetail(DetailView):
     template_name = 'store/product.html'
     # Название объекта, в котором будет выбранный пользователем продукт
     context_object_name = 'product'
+
+class ProductCreate(CreateView):
+    model = Product
+    fields = '__all__'
+
+    

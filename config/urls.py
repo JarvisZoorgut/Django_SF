@@ -21,6 +21,6 @@ urlpatterns = [
    path('admin/', admin.site.urls),
    path('pages/', include('django.contrib.flatpages.urls')),
    # Делаем так, чтобы все адреса из нашего приложения (store/urls.py) подключались к главному приложению с префиксом products/.
-   path('products/', include('store.urls')),
-   path('posts/', include('newsportal.urls')),
+   path('store/products/', include('store.urls')),
+   path('newsportal/posts/', include('newsportal.urls')),
 ]
