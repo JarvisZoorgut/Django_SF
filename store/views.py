@@ -4,6 +4,7 @@ from datetime import datetime
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
 from .models import Product
+from django.http import HttpResponse
 
 
 class ProductsList(ListView):
@@ -33,6 +34,7 @@ class ProductsList(ListView):
         context['next_sale'] = None # или вставляем текст 'Распродажа в воскресенье!'
         return context
 
+
 class ProductDetail(DetailView):
     # Модель всё та же, но мы хотим получать информацию по отдельному товару
     model = Product
@@ -41,8 +43,20 @@ class ProductDetail(DetailView):
     # Название объекта, в котором будет выбранный пользователем продукт
     context_object_name = 'product'
 
+
 class ProductCreate(CreateView):
     model = Product
     fields = '__all__'
 
-    
+
+def multiply(request):
+   number = request.GET.get('number')
+   multiplier = request.GET.get('multiplier')
+
+   try:
+       result = int(number) * int(multiplier)
+       html = f"<html><body>{number}*{multiplier}={result}</body></html>"
+   except (ValueError, TypeError):
+       html = f"<html><body>Invalid input.</body></html>"
+
+   return HttpResponse(html)

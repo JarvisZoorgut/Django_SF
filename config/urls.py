@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from store.views import multiply
 
 urlpatterns = [
    path('admin/', admin.site.urls),
@@ -23,4 +24,5 @@ urlpatterns = [
    # Делаем так, чтобы все адреса из нашего приложения (store/urls.py) подключались к главному приложению с префиксом products/.
    path('store/products/', include('store.urls')),
    path('newsportal/posts/', include('newsportal.urls')),
+   path('multiply/', multiply),
 ]
