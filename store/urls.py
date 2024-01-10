@@ -1,6 +1,6 @@
 from django.urls import path
 # Импортируем созданные нами представления
-from .views import ProductsList, ProductDetail, ProductCreate
+from .views import ProductsList, ProductDetail, ProductCreate, create_product
 
 urlpatterns = [
    # path — означает путь.
@@ -13,4 +13,5 @@ urlpatterns = [
    # int — указывает на то, что принимаются только целочисленные значения
    path('<int:pk>', ProductDetail.as_view(), name='product'),
    path('product_create/', ProductCreate.as_view()),
+   path('create_product/', create_product, name='create_product'),
 ]

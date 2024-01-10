@@ -3,10 +3,12 @@ from datetime import datetime
 # что в этом представлении мы будем выводить список объектов из БД
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 
 from .models import Product
 from .filters import ProductFilter
+from .forms import ProductForm
 
 
 class ProductsList(ListView):
@@ -20,7 +22,7 @@ class ProductsList(ListView):
     # Это имя списка, в котором будут лежать все объекты.
     # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
     context_object_name = 'products'
-    paginate_by = 1  # вот так мы можем указать количество записей на странице
+    paginate_by = 3  # вот так мы можем указать количество записей на странице
 
     # Переопределяем функцию получения списка товаров
     def get_queryset(self):
@@ -75,3 +77,14 @@ def multiply(request):
        html = f"<html><body>Invalid input.</body></html>"
 
    return HttpResponse(html)
+
+def create_product(request):
+    form = ProductForm()
+
+    if request.method =='POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/store/products/')
+                                        
+    return render(request, 'store/product_edit.html', {'form': form})

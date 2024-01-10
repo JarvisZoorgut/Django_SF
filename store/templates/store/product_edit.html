@@ -9,7 +9,11 @@
 </head>
 <body>
     {% block content %}
-        <form method="product" {% csrf_token %} {{ form.as_p }} <input type="submit" value="Сохранить"></form>
+    <form action="" method="post">
+         {% csrf_token %} 
+         {{ form.as_p }} 
+         <input type="submit" value="Сохранить">
+    </form>
     {% endblock content %}
 </body>
 </html>
