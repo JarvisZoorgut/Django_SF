@@ -1,11 +1,13 @@
 {% extends 'flatpages/default.html' %}
 
+{% load custom_filters_newsportal %}
+
 {% block title %}
-<title>НП: {{ post.title|truncatewords:2 }}</title>
+<title>НП: {{ post.title|truncatewords:2|censor }}</title>
 {% endblock title %}
 
 {% block content %}
-        <p><h1> {{ post.title }} </h1></p>
+        <p><h1> {{ post.title|censor }} </h1></p>
         <p><h2> {{ post.dateCreation|date:'d.m.Y'}} </h2></p>
-        {{ post.text }}
+        {{ post.text|censor }}
 {% endblock content %}
