@@ -1,10 +1,11 @@
 from datetime import datetime
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
-from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+#from django.views.generic.edit import CreateView почему через edit? что это было?
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse_lazy
 
 from .models import Product
 from .filters import ProductFilter
@@ -61,10 +62,26 @@ class ProductDetail(DetailView):
     context_object_name = 'product'
 
 
+# Добавляем новое представление для создания товаров.
 class ProductCreate(CreateView):
+    # Указываем нашу разработанную форму
+    form_class = ProductForm
+    # модель товаров
     model = Product
-    fields = '__all__'
+    # и новый шаблон, в котором используется форма.
+    template_name = 'store/product_edit.html'
 
+# Добавляем представление для изменения товара.
+class ProductUpdate(UpdateView):
+    form_class = ProductForm
+    model = Product
+    template_name = 'store/product_edit.html'
+
+# Представление удаляющее товар.
+class ProductDelete(DeleteView):
+    model = Product
+    template_name = 'store/product_delete.html'
+    success_url = reverse_lazy('products')
 
 def multiply(request):
    number = request.GET.get('number')

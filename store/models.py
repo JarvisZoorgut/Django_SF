@@ -20,11 +20,11 @@ class Product(models.Model):
         ordering = ['-price']
 
     def __str__(self):
-        return f'{self.name} : {self.description[:20]}. Цена: {str(self.price)}'
+        return f'{self.name} : {self.description}. Цена: {str(self.price)}'
 
     #для упрощения описания ссылок
     def get_absolute_url(self):
-        return reverse('detail', kwargs={'id': self.id})
+        return reverse('product', kwargs={'pk': self.id})
 
 
 # Категория, к которой будет привязываться товар
