@@ -1,5 +1,7 @@
 {% extends 'flatpages/default.html' %}
 
+{% load custom_filters_newsportal %}
+
 {% block title %}
 <title>Новостной портал</title>
 {% endblock title %}
@@ -10,9 +12,9 @@
     {% if posts %}
            {% for post in posts %}
            <tr>
-                {{ post.title }} &nbsp&nbsp | &nbsp&nbsp
+                {{ post.title|censor }} &nbsp&nbsp | &nbsp&nbsp
                 {{ post.dateCreation|date:'d.m.Y'}} &nbsp&nbsp | &nbsp&nbsp
-                {{ post.text|truncatewords:20}}
+                {{ post.text|truncatewords:20|censor}}
                 <br>
            {% endfor %}
    {% else %}
