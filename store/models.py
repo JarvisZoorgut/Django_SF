@@ -24,7 +24,7 @@ class Product(models.Model):
 
     #для упрощения описания ссылок
     def get_absolute_url(self):
-        return reverse('product', kwargs={'pk': self.id})
+        return reverse('product_detail', args=[str(self.id)])
 
 
 # Категория, к которой будет привязываться товар
