@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from .models import Product
 from .filters import ProductFilter
@@ -63,7 +64,8 @@ class ProductDetail(DetailView):
 
 
 # Добавляем новое представление для создания товаров.
-class ProductCreate(CreateView):
+class ProductCreate(LoginRequiredMixin, CreateView):
+    raise_exception = True
     # Указываем нашу разработанную форму
     form_class = ProductForm
     # модель товаров
@@ -72,13 +74,18 @@ class ProductCreate(CreateView):
     template_name = 'store/product_edit.html'
 
 # Добавляем представление для изменения товара.
-class ProductUpdate(UpdateView):
+class ProductUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ('store.change_product')
+    raise_exception = True
     form_class = ProductForm
     model = Product
     template_name = 'store/product_edit.html'
 
 # Представление удаляющее товар.
-class ProductDelete(DeleteView):
+class ProductDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('store.delete_product')
+    raise_exception = True
+    permission_denied_message = 'Пшол вон!!!'
     model = Product
     template_name = 'store/product_delete.html'
     success_url = reverse_lazy('products')

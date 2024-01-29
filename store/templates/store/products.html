@@ -33,6 +33,11 @@
    </form>
 
     <hr>
+
+    {# Теперь будем проверять не request.user.is_authenticated, а конкретные права #}
+    {% if perms.store.add_product %}
+    <a href="/store/products/create">Добавить товар</a>
+    {% endif %}
     {% if products %}
         <table cellspacing="0" cellpadding="10" rules="cols" border="2" width="100%">
             <tr>
@@ -41,6 +46,11 @@
                 <td>Категория</td>
                 <td>Цена</td>
                 <td>Количество</td>
+
+                {# Условие получается составным. #}
+                {% if perms.store.change_product or perms.store.delete_product %}
+                <td>Действия</td>
+                {% endif %}
             </tr>
           
             <!-- Для каждого товара будете генерироваться новая строчка,
@@ -62,6 +72,15 @@
                 <!-- Используем наш фильтр -->
                 <td>{{ x.price|currency:"usd" }}</td>
                 <td>{{ x.quantity }}</td>
+                <td>
+                    {# А здесь доступ для каждой ссылки теперь будем проверять отдельно #}
+                    {% if perms.store.change_product %}
+                    <a href="/store/products/{{ x.id }}/update">Изменить</a>
+                    {% endif %}
+                    {% if perms.store.delete_product %}
+                    <a href="/store/products/{{ x.id }}/delete">Удалить</a>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
 

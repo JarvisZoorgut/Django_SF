@@ -19,10 +19,13 @@ from django.urls import path, include
 from store.views import multiply
 
 urlpatterns = [
-   path('admin/', admin.site.urls),
-   path('pages/', include('django.contrib.flatpages.urls')),
-   # Делаем так, чтобы все адреса из нашего приложения (store/urls.py) подключались к главному приложению с префиксом products/.
-   path('store/', include('store.urls')),
-   path('newsportal/', include('newsportal.urls')),
-   path('multiply/', multiply),
+    path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path("accounts/", include("accounts.urls")),  # Добавили эту строчку
+    path("accounts_allauth/", include("allauth.urls")),  # Подключили allauth
+    path('pages/', include('django.contrib.flatpages.urls')),
+    # Делаем так, чтобы все адреса из нашего приложения (store/urls.py) подключались к главному приложению с префиксом products/.
+    path('store/', include('store.urls')),
+    path('newsportal/', include('newsportal.urls')),
+    path('multiply/', multiply),
 ]
