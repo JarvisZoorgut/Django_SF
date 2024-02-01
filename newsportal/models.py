@@ -6,9 +6,13 @@ from django.shortcuts import reverse
 
 
 class Author(models.Model):
-    authorUser = models.OneToOneField(User, on_delete=models.CASCADE)
+    authorUser = models.ForeignKey(User, on_delete=models.CASCADE)
     
     ratingAuthor = models.SmallIntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Автор'
+        verbose_name_plural = 'Авторы'
 
     def __str__(self):
         return f'{self.authorUser} / Рейтинг: {self.ratingAuthor}'
@@ -30,12 +34,16 @@ class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
 
     def __str__(self):
-        return f'{self.name}'    
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
 
 class Post(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    postCategory = models.ManyToManyField(Category, through='PostCategory')
+    postCategory = models.ManyToManyField(Category, through='PostCategory', verbose_name='Категория')
 
     CATEGORY_CHOICES = (
         ('NW', 'Новость'),
@@ -43,9 +51,13 @@ class Post(models.Model):
     )
     categoryType = models.CharField(max_length=2, choices=CATEGORY_CHOICES)
     dateCreation = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=128)
-    text = models.TextField()
+    title = models.CharField(max_length=128, verbose_name='Заголовок')
+    text = models.TextField(verbose_name='Содержание')
     rating = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Контент'
+        verbose_name_plural = 'Контент'
 
     def __str__(self):
         return f'{self.categoryType} / {self.title}'    
@@ -64,12 +76,18 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post', kwargs={'pk': self.id})
 
+
 class PostCategory(models.Model):
     postThrough = models.ForeignKey(Post, on_delete=models.CASCADE)
     categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = 'Связь Пост/Категория'
+        verbose_name_plural = 'Связи Пост/Категория'
+
     def __str__(self):
-        return f'{self.categoryThrough} / {self.postThrough.title}'    
+        return f'{self.postThrough.title} / {self.categoryThrough.name}'
+
 
 class Comment(models.Model):
     commentPost = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -78,6 +96,10 @@ class Comment(models.Model):
     text = models.TextField()
     dateCreation = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
 
     def like(self):
         self.rating +=1

@@ -5,9 +5,10 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm
 from django import forms
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
-from newsportal.models import Post
-
+from newsportal.models import Author, Post
+from django.contrib.auth.models import User
 
 
 class PostList(ListView):
@@ -25,24 +26,41 @@ class PostList(ListView):
         context = super().get_context_data(**kwargs)
         context['total_posts_count'] = self.filterset.qs.count()
         context['filterset'] = self.filterset
+        context['user_is_author'] = self.request.user.groups.filter(name='authors').exists()
+        context['user_is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
         return context
+
 
 class PostDetail(DetailView):
     model = Post
     template_name = 'newsportal/post.html'
     context_object_name = 'post'
 
-class NewsCreate(CreateView):
+
+class NewsCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('newsportal.add_post')
+    raise_exception = True
     form_class = NewsForm
     model = Post
     template_name = 'newsportal/news_create.html'
 
+    def handle_no_permission(self):
+        return render(self.request, '403_login.html', status=403) 
+
     def form_valid(self, form):
         post = form.save(commit=False)
         post.categoryType = 'NW'
+        current_author = self.request.user
+        author, created = Author.objects.get_or_create(authorUser=current_author)
+        post.author = author
+        post.save()
+
         return super().form_valid(form)
-    
-class NewsEdit(UpdateView):
+
+   
+class NewsEdit(PermissionRequiredMixin, UpdateView):
+    permission_required = ('newsportal.change_post')
+    raise_exception = True
     form_class = NewsForm
     model = Post
     template_name = 'newsportal/post_edit.html'
@@ -56,8 +74,11 @@ class NewsEdit(UpdateView):
             raise forms.ValidationError("По этому пути нельзя редактировать СТАТЬИ")
         
         return obj
+    
 
-class NewsDelete(DeleteView):
+class NewsDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('newsportal.delete_post')
+    raise_exception = True
     model = Post
     template_name = 'newsportal/post_delete.html'
     success_url = reverse_lazy('posts')
@@ -71,18 +92,29 @@ class NewsDelete(DeleteView):
             raise forms.ValidationError("По этому пути нельзя удалить СТАТЬИ")
         
         return obj
-    
-class ArticlesCreate(CreateView):
+
+
+class ArticlesCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('newsportal.add_post')
     form_class = ArticleForm
     model = Post
     template_name = 'newsportal/article_create.html'
 
+    def handle_no_permission(self):
+        return render(self.request, '403_login.html', status=403)
+
     def form_valid(self, form):
         post = form.save(commit=False)
         post.categoryType = 'AR'
+        current_author = self.request.user
+        author, created = Author.objects.get_or_create(authorUser=current_author)
+        post.author = author
         return super().form_valid(form)
-    
-class ArticlesEdit(UpdateView):
+
+
+class ArticlesEdit(PermissionRequiredMixin, UpdateView):
+    permission_required = ('newsportal.change_post')
+    raise_exception = True
     form_class = ArticleForm
     model = Post
     template_name = 'newsportal/post_edit.html'
@@ -96,8 +128,11 @@ class ArticlesEdit(UpdateView):
             raise forms.ValidationError("По этому пути нельзя редактировать НОВОСТИ")
         
         return obj
-    
-class ArticlesDelete(DeleteView):
+
+
+class ArticlesDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('newsportal.delete_post')
+    raise_exception = True
     model = Post
     template_name = 'newsportal/post_delete.html'
     success_url = reverse_lazy('posts')
@@ -111,6 +146,3 @@ class ArticlesDelete(DeleteView):
             raise forms.ValidationError("По этому пути нельзя удалить НОВОСТИ")
         
         return obj
-    
-
-

@@ -8,18 +8,23 @@
 {% endblock title %}
 
 {% block content %}
-    <h1>Всего объектов на портале - {{ total_posts_count }}</h1>
+    <p><h1>Всего объектов на портале - {{ total_posts_count }}</h1></p>
+    {% if user_is_author %}
+        <a href="{% url 'news_create' %}">Добавить новость</a>
+        <a href="{% url 'article_create' %}">Написать статью</a>
+    {% endif %}  
     <hr>
+    <h3><a href="{% url 'post_search' %}">Поиск контента</a></h3>
     {% if posts %}
            {% for post in posts %}
            <tr>
-                {{ post.title|censor }} &nbsp&nbsp | &nbsp&nbsp
+                <a href="{% url 'post' post.id %}">{{ post.title|censor }}</a> &nbsp&nbsp | &nbsp&nbsp
                 {{ post.dateCreation|date:'d.m.Y'}} &nbsp&nbsp | &nbsp&nbsp
                 {{ post.text|truncatewords:20|censor}}
                 <br>
            {% endfor %}
    {% else %}
-        <!-- <h2>Новостей нет</h2> -->
+        <h2>Новостей нет</h2>
     {% endif %}
     {% if total_posts_count > 10 %}
         {% if page_obj.has_previous %}
