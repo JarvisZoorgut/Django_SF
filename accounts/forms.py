@@ -29,7 +29,7 @@ class CustomSignupForm(SignupForm):
         user.groups.add(authors)
 
         send_mail(
-            subject = 'Добро пожаловать в наш интернет-магазин!',
+            subject = 'Добро пожаловать на наш новостной портал!',
             message = f'{user.username}, вы успешно зарегистрировались!',
             from_email = None,  # будет использовано значение DEFAULT_FROM_EMAIL
             recipient_list = [user.email],
