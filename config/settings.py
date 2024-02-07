@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+from ast import literal_eval
 from dotenv import load_dotenv
 env_path = Path('.')/'.env'
 load_dotenv(dotenv_path=env_path)
@@ -170,5 +171,18 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
-SERVER_EMAIL = EMAIL_HOST_USER
-EMAIL_ADMIN = EMAIL_HOST_USER
+SERVER_EMAIL = os.getenv("SERVER_EMAIL")
+EMAIL_ADMIN = os.getenv("EMAIL_HOST_USER")
+MANAGERS = os.getenv("MANAGERS")
+if MANAGERS:
+    try:
+        MANAGERS = literal_eval(MANAGERS)
+        if not isinstance(MANAGERS, list):
+            raise ValueError("MANAGERS должен быть списком кортежей.")
+        for manager in MANAGERS:
+            if not isinstance(manager, tuple) or len(manager) != 2:
+                raise ValueError("Каждый элемент в MANAGERS должен быть кортежем из двух элементов.")
+    except Exception as e:
+        raise ValueError("Ошибка при преобразовании MANAGERS:", e)
+else:
+    MANAGERS = []
