@@ -160,29 +160,26 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+# Указали форму для дополнительной обработки регистрации пользователя
 ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# Настройки почты
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
-SERVER_EMAIL = os.getenv("SERVER_EMAIL")
-EMAIL_ADMIN = os.getenv("EMAIL_HOST_USER")
-MANAGERS = os.getenv("MANAGERS")
-if MANAGERS:
-    try:
-        MANAGERS = literal_eval(MANAGERS)
-        if not isinstance(MANAGERS, list):
-            raise ValueError("MANAGERS должен быть списком кортежей.")
-        for manager in MANAGERS:
-            if not isinstance(manager, tuple) or len(manager) != 2:
-                raise ValueError("Каждый элемент в MANAGERS должен быть кортежем из двух элементов.")
-    except Exception as e:
-        raise ValueError("Ошибка при преобразовании MANAGERS:", e)
-else:
-    MANAGERS = []
+
+# ХЕЛП!!! так и не разобрался, как это спрятать в .env!!!
+SERVER_EMAIL = "sftestmail@yandex.ru"
+MANAGERS = (
+    ('Ivan', 'sftestmail@yandex.ru'),
+    ('Petr', 'jarvis.zoorgut@yandex.ru')
+)
+

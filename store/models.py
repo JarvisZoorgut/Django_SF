@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.shortcuts import reverse
+from django.contrib.auth.models import User
 
 
 # Товар для нашей витрины 
@@ -39,3 +40,16 @@ class Category(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
         ordering = ['name']
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='subscriptions',)
+    category = models.ForeignKey(to='Category', on_delete=models.CASCADE, related_name='subscriptions',)
+
+    def __str__(self):
+        return f'{self.user} подписан на {self.category}'
+
+    class Meta:
+        verbose_name = 'Подписчик'
+        verbose_name_plural = 'Подписчики'
+        ordering = ['user']
