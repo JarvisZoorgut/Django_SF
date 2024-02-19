@@ -33,7 +33,9 @@
    </form>
 
     <hr>
-    <h3><a href="{% url 'subscriptions' %}">Подписаться на рассылку</a></h3>
+        {% if user.is_authenticated %}
+            <h3><a href="{% url 'subscriptions' %}">Подписаться на рассылку</a></h3>
+        {% endif %}
     {# Теперь будем проверять не request.user.is_authenticated, а конкретные права #}
     {% if perms.store.add_product %}
     <h3><a href="/store/products/create">Добавить товар</a></h3>

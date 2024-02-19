@@ -109,3 +109,14 @@ class Comment(models.Model):
         self.rating -=1
         self.save()
 
+class Subscriber(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='subscribers',)
+    category = models.ForeignKey(to='Category', on_delete=models.CASCADE, related_name='subscribers',)
+
+    def __str__(self):
+        return f'{self.user} подписан на {self.category}'
+
+    class Meta:
+        verbose_name = 'Подписчик'
+        verbose_name_plural = 'Подписчики'
+        ordering = ['user']

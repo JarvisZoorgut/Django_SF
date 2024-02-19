@@ -8,7 +8,13 @@
 {% endblock title %}
 
 {% block content %}
-    <p><h1>Всего объектов на портале - {{ total_posts_count }}</h1></p>
+    <p>
+        <h1>Всего объектов на портале - {{ total_posts_count }}</h1>
+        {% if user.is_authenticated %}
+            <h6><a href="{% url 'subscriptions' %}">Подписаться на рассылку новостей по категориям</a></h6>
+        {% endif %}
+    </p>
+
     {% if user_is_author %}
         <a href="{% url 'news_create' %}">Добавить новость</a>
         <a href="{% url 'article_create' %}">Написать статью</a>
@@ -20,7 +26,7 @@
            <tr>
                 <a href="{% url 'post' post.id %}">{{ post.title|censor }}</a> &nbsp&nbsp | &nbsp&nbsp
                 {{ post.dateCreation|date:'d.m.Y'}} &nbsp&nbsp | &nbsp&nbsp
-                {{ post.text|truncatewords:20|censor}}
+                {{ post.text|truncatechars:100|censor}}
                 <br>
            {% endfor %}
    {% else %}
