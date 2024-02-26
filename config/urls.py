@@ -28,4 +28,5 @@ urlpatterns = [
     path('store/', include('store.urls')),
     path('newsportal/', include('newsportal.urls')),
     path('multiply/', multiply),
+    path('mc_board/', include('mc_board.urls')),
 ]

@@ -1,6 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 #from django.views.generic.edit import CreateView почему через edit? что это было?
 from django.http import HttpResponse, HttpResponseRedirect
@@ -14,6 +15,7 @@ from django.db.models import Exists, OuterRef
 from .models import Product, Subscription, Category
 from .filters import ProductFilter
 from .forms import ProductForm
+from .tasks import hello, printer
 
 
 class ProductsList(ListView):
@@ -137,3 +139,9 @@ def create_product(request):
             return HttpResponseRedirect('/store/products/')
                                         
     return render(request, 'store/product_edit.html', {'form': form})
+
+class IndexView(View):
+    def get(self, request):
+        printer.apply_async([10], eta = datetime.now() + timedelta(seconds=5))
+        hello.delay()
+        return HttpResponse('Hello!')
