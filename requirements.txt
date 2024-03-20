@@ -17,3 +17,5 @@ requests
 requests-oauthlib
 sqlparse
 urllib3
+celery
+django-apscheduler
