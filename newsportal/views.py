@@ -12,6 +12,7 @@ from django.db.models import Exists, OuterRef
 
 from newsportal.models import Author, Post, Category, Subscriber
 from django.contrib.auth.models import User
+from .tasks import send_notification_email
 
 
 class PostList(ListView):
@@ -57,6 +58,14 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
         author, created = Author.objects.get_or_create(authorUser=current_author)
         post.author = author
         post.save()
+
+        # Запуск задачи Celery для отправки уведомлений
+        send_notification_email.delay(
+            post.preview(),
+            post.pk,
+            post.title,
+            [subscriber.user.email for subscriber in Subscriber.objects.filter(category=post.postCategory)],
+        )
 
         return super().form_valid(form)
 

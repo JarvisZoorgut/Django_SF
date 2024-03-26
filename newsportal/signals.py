@@ -7,7 +7,7 @@ from .models import Post
 
 
 @receiver(m2m_changed, sender=Post.postCategory.through)
-def product_created(instance, action, **kwargs):
+def post_created(instance, action, **kwargs):
     if action!= 'post_add':
         return
 

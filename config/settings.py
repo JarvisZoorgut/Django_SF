@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 from ast import literal_eval
 from dotenv import load_dotenv
+from urllib.parse import urlparse
+
 env_path = Path('.')/'.env'
 load_dotenv(dotenv_path=env_path)
 
@@ -168,7 +170,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}
 
 # Настройки почты
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
@@ -190,3 +192,6 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+BASE_URL = 'http://127.0.0.1:8000'
+SITE_URL = 'http://127.0.0.1:8000'

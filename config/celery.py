@@ -14,7 +14,7 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'action_every_monday_morning_8am': {
         'task': 'newsportal.tasks.notify_subscribers_about_weekly_news',
-        'schedule': crontab(hour=8, minute=0, day_of_week='monday'),
+        'schedule': crontab(hour=14, minute=35, day_of_week='tuesday'),
     },
     # 'print_every_10_seconds': {
     #     'task': 'store.tasks.printer',
